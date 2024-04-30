@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+      integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Task Management App</title>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        const tagButtons = document.querySelectorAll('.tag-button');
+        
+        tagButtons.forEach(function(button) {
+          button.addEventListener('click', function() {
+            const tagId = this.getAttribute('data-tag-id');
+            const checkbox = document.getElementById('tag_' + tagId);
+            
+            checkbox.checked = !checkbox.checked;
+            
+            if (checkbox.checked) {
+              this.classList.remove('btn-secondary');
+              this.classList.add('btn-success');
+            } else {
+              this.classList.remove('btn-success');
+              this.classList.add('btn-secondary');
+            }
+          });
+        });
+      });
+    </script>
+    <script>
+      function filterTasks() {
+        var completedFilter = document.getElementById("completed-filter").value;
+        var dueDateFilter = document.getElementById("due-date-filter").value;
+    
+        if (!dueDateFilter) {
+            dueDateFilter = 'all';
+        }
+    
+        console.log("Due Date Filter:", dueDateFilter);
+    
+        var tasks = document.getElementsByClassName("task");
+    
+        for (var i = 0; i < tasks.length; i++) {
+            var task = tasks[i];
+            var completed = task.getAttribute("data-completed");
+            var dueDate = task.getAttribute("data-due-date");
+    
+            console.log("Due Date:", dueDate);
+    
+            if (dueDate === null) {
+                task.style.display = "none";
+                continue;
+            }
+    
+            var dueDateMillis;
+    
+            if (dueDate.includes("midnight")) {
+                dueDate = dueDate.replace("midnight", "00:00:00");
+                dueDateMillis = new Date(dueDate).getTime();
+            } else {
+                dueDateMillis = new Date(dueDate).getTime();
+            }
+    
+            if (isNaN(dueDateMillis)) {
+                dueDateMillis = 0;
+            }
+    
+            console.log("Due Date Millis:", dueDateMillis);
+    
+            const timeZoneOffsetInMinutes = new Date().getTimezoneOffset();
+            const timeZoneOffsetInHours = timeZoneOffsetInMinutes / 60;
+            console.log("time zone",timeZoneOffsetInHours);
+    
+            var selectedDateMillis = dueDateFilter === 'all' ? 0 : new Date(dueDateFilter).getTime() + (timeZoneOffsetInHours * 60 * 60 * 1000);
+    
+            console.log("Selected Date Millis:", selectedDateMillis);
+            if (selectedDateMillis === dueDateMillis || dueDateFilter === 'all') {
+                if (completedFilter === 'all' || completedFilter === completed) {
+                    task.style.display = "block";
+                } else {
+                    task.style.display = "none";
+                }
+            } else {
+                task.style.display = "none";
+            }
+        }
+    }
+    </script>
+    <style>
+      .navbar-brand {
+        font-weight: 100;
+        text-transform: uppercase;
+        border: 1px solid #fff;
+      
+        padding: 5px 10px;
+        color: #fff;
+        font-size: 1.1em;
+        font-family: "Roboto", sans-serif;
+      }
+      
+      @media (max-width: 991px) {
+        .sidebar {
+          background-color: rgba(0, 0, 0, 0.15);
+          backdrop-filter: blur(5px);
+          width: 100% !important;
+        }
+      }
+      .custom-footer {
+        background-color: #333;
+        color: #fff;
+        padding: 20px 0;
+        margin-top: 20px;
+      }
+      .card-tasks {
+        border-radius: 30px;
+        margin-bottom: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        height: 470px;
+      }
+      .card-img {
+        border-radius: 50px;
+        padding: 20px;
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+      }
+      .card-img-details {
+        border-radius: 50px;
+        padding: 20px;
+        width: 100%;
+        height: 450px;
+        object-fit: cover;
+      }
+      .card-body-task {
+        padding: 25px;
+        margin-top: -25px;
+        padding-bottom: 0 !important;
+        margin-bottom: 0 !important;
+      }
+      .card-title a {
+        text-decoration: none;
+        color: inherit;
+        font-weight: 700;
+      }
+      .card-text {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        color: #333;
+      }
+      .tags {
+        margin-block: 5px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        flex-wrap: wrap;
+      }
+      .card-tags {
+        padding: 2px 15px;
+        padding-right: 15px;
+        background-color: #40B5AD;
+        border-radius: 20px;
+        color: #eee;
+        font-size: 0.8em;
+        font-weight: 600;
+        padding-bottom: 4px;
+      }
+      .tags-container {
+        padding: 2px 15px;
+        padding-right: 15px;
+        border-radius: 20px;
+        color: #eee;
+        font-size: 0.8em;
+        font-weight: 600;
+      }
+      .card-tags i {
+        margin-right: 2px;
+      }
+      .completed {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        background-color: white;
+        border-radius: 50%;
+      }
+      .progress {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        background-color: #FFAC1C;
+        border-radius: 50%;
+        height: 65px;
+        width: 65px;
+        padding: 7px;
+      }
+      .completed-details {
+        position: absolute;
+        top: 80px;
+        right: 140px;
+        background-color: white;
+        border-radius: 50%;
+      }
+      .progress-details {
+        position: absolute;
+        top: 80px;
+        right: 140px;
+        background-color: #FFAC1C;
+        border-radius: 50%;
+        height: 65px;
+        width: 65px;
+        padding: 7px;
+      }
+      .btn-update {
+        border-radius: 50%;
+        padding: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: fit-content;
+        padding-bottom: 30px;
+      }
+      .title-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .drop-container {
+        position: relative;
+        display: flex;
+        gap: 10px;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 200px;
+        padding: 20px;
+        border-radius: 10px;
+        border: 2px dashed #555;
+        color: #444;
+        cursor: pointer;
+        transition: background .2s ease-in-out, border .2s ease-in-out;
+      }
+      .drop-container:hover {
+        background: #eee;
+        border-color: #111;
+      }
+      .drop-container:hover .drop-title {
+        color: #222;
+      }
+      .drop-title {
+        color: #444;
+        font-size: 20px;
+        font-weight: bold;
+        text-align: center;
+        transition: color .2s ease-in-out;
+      }
+      input[type=file] {
+        width: 350px;
+        max-width: 100%;
+        color: #444;
+        padding: 5px;
+        background: #fff;
+        border-radius: 10px;
+        border: 1px solid #555;
+      }
+      input[type=file]::file-selector-button {
+        margin-right: 20px;
+        border: none;
+        background: #084cdf;
+        padding: 10px 20px;
+        border-radius: 10px;
+        color: #fff;
+        cursor: pointer;
+        transition: background .2s ease-in-out;
+      }
+      
+      input[type=file]::file-selector-button:hover {
+        background: #0d45a5;
+      }
+      </style>
+</head>
+<body>
+    {% include './header.html' %}
+    <main>
+      {% block content %}
+      {% endblock %}
+    </main>
+
+    {% include './footer.html' %}
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+      crossorigin="anonymous"
+    ></script>
+</body>
+</html>

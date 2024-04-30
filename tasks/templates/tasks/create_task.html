@@ -1,0 +1,54 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Create Task- My Site{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-5">
+  <h1>Create Task</h1>
+<form method="post" enctype="multipart/form-data" class="form">
+  {% csrf_token %}
+  <div class="form-group mb-3">
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" class="form-control" required />
+  </div>
+  <div class="form-group mb-3">
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" class="form-control"></textarea>
+  </div>
+  <div class="form-group mb-3 form-check">
+    <input type="checkbox" id="completed" name="completed" class="form-check-input" />
+    <label class="form-check-label" for="completed">Completed</label>
+  </div>
+  <div class="form-group mb-3">
+    <label for="due_date">Due Date:</label>
+    <input type="date" id="due_date" name="due_date" class="form-control" />
+  </div>
+  <div class="form-group mb-3">
+    <label for="image" class="drop-container" id="dropcontainer">
+      <span class="drop-title">Drop files here</span>
+      or
+      <input type="file" id="image" name="image" accept="image/*" class="form-control-file" />
+    </label>
+  </div>
+
+  
+  <div class="form-group mb-3">
+    <label for="tags">Tags:</label><br />
+    {% for tag in tags %}
+      <div class="form-check form-check-inline m-0 p-0">
+        <input type="checkbox" id="tag_{{ tag.id }}" name="tags" value="{{ tag.id }}" style="display: none;" />
+        <label class="form-check-label" for="tag_{{ tag.id }}">
+          <button type="button" class="btn tags-container {% if tag_selected %}btn-success{% else %}btn-secondary{% endif %} tag-button" data-tag-id="{{ tag.id }}">
+              <i class="far fa-check"></i>
+            {{ tag.title }}
+          </button> 
+        </label>
+      </div>
+    {% endfor %}
+  </div>
+
+  <button type="submit" class="btn btn-primary">Create</button>
+</form>
+</div>
+
+{% endblock %}

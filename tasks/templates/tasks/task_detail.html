@@ -1,0 +1,34 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Task Detail - My Site{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-4 ">
+    <h1 class="mb-0">{{ task.title }}</h1>
+    <p>{% if task.due_date %}{{ task.due_date }}{% else %}No due date{% endif %}</p>
+    <hr>
+    <p>{{ task.description }}</p>
+
+    {% if task.tags.all %}
+        <h5>Tags:</h5>
+        <ul>
+            {% for tag in task.tags.all %}
+                <span class="card-tags"><i class="far fa-check"></i> {{ tag.title }}</span>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No tags associated with this task.</p>
+    {% endif %}
+
+    {% if task.completed %}
+    <div class="completed-details"><i class="fas fa-check-circle" style="color: #00A36C; font-size: 65px;"></i></div>
+    {% else %}
+    <div class="progress-details"><i class="fad fa-spinner fa-spin" style="color: white; font-size: 50px;"></i></div>
+    {% endif %}
+    {% if task.image %}
+        <img src="{{ task.image.url }}" alt="Current Image" class="card-img-left card-img-details">
+      {% else %}
+        <img src="https://picsum.photos/200" alt="Default Image" class="card-img-left card-img-details">
+      {% endif %}
+</div>
+{% endblock %}

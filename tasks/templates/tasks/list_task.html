@@ -1,0 +1,76 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Task List - My Site{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-4">
+  <div class="title-section">
+    <h1 class="fs-5">Tasks list</h1>
+    <a href="{% url 'task-create' %}" class="btn btn-primary">Create Task</a>
+  </div>
+  <div class="filter mt-4">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="input-group mb-3">
+          <label class="input-group-text" for="completed-filter"
+            >State</label
+          >
+          <select class="form-select" id="completed-filter" onchange="filterTasks()">
+            <option value="all">All</option>
+            <option value="true">Completed</option>
+            <option value="false">Not Completed</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="input-group mb-3">
+          <label class="input-group-text" for="due-date-filter"
+            >Due Date</label
+          >
+          <input type="date" class="form-control" id="due-date-filter" onchange="filterTasks()" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<div class="row">
+  {% for task in tasks %}
+  <div class="col-md-4 task" data-completed="{% if task.completed %}true{% else %}false{% endif %}" data-due-date="{% if task.due_date %}{{ task.due_date }}{% else %}null{% endif %}">
+    <div class="card card-tasks" style="width: 100%">
+      {% if task.image %}
+        <img src="{{ task.image.url }}" alt="Current Image" class="card-img-left card-img">
+      {% else %}
+        <img src="https://picsum.photos/200" alt="Default Image" class="card-img-left card-img">
+      {% endif %}
+      <div class="card-body card-body-task">
+        <h5 class="card-title"><a href="{% url 'task-detail' task.id %}" class="card-link">
+          {{ task.title }}
+        </a></h5>
+        <div class="tags">
+          {% for tag in task.tags.all %}
+          <span class="card-tags"><i class="far fa-check"></i> {{ tag.title }}</span>
+          {% endfor %}
+        </div>
+        <p class="card-text">
+          {{ task.description }}
+        </p>
+      </div>
+      {% if task.completed %}
+      <div class="completed"><i class="fas fa-check-circle" style="color: #00A36C; font-size: 65px;"></i></div>
+      {% else %}
+      <div class="progress"><i class="fad fa-spinner fa-spin" style="color: white; font-size: 50px;"></i></div>
+      {% endif %}
+      <div class="d-flex" style="padding-inline: 10px;">
+        <a href="{% url 'task-update' task.id %}" class="btn btn-update"><i class="fas fa-edit" style="color: #ffb005; font-size: 20px;"></i></a>
+        <form method="post" action="{% url 'task-delete' task.id %}" style="display: inline;">
+          {% csrf_token %}
+          <input type="hidden" name="confirm_delete" value="1">
+          <button type="submit" class="btn btn-update"><i class="far fa-trash-alt" style="color: #e90c0c; font-size: 20px;"></i></button>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

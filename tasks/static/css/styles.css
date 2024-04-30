@@ -1,0 +1,24 @@
+/* styles.css */
+.custom-header {
+    background-color: #343a40;
+    color: #fff;
+    padding: 10px 0;
+  }
+  .custom-footer {
+    background-color: #343a40;
+    color: #fff;
+    padding: 5px 0;
+  }
+  .card-task {
+    height: 200px;
+  }
+  .card-img {
+    height: 150px;
+    width: 250px;
+    object-fit: cover;
+  }
+  .card-title a {
+    text-decoration: none;
+    color: inherit;
+  }
+  
