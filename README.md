@@ -55,6 +55,7 @@ python manage.py runserver
 
 By default, the application will be available at: http://localhost:8000
 
+Add same Tags to the database
 
 To run tests for the application, execute the following command from the project root directory:
 
@@ -68,3 +69,5 @@ python manage.py createsuperuser
 put the username and the password
 and now you can use the admin interface with this link :
 http://localhost:8000/admin/
+
+you can test the serch and filters and the optimisation with the pagination
